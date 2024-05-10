@@ -1,0 +1,44 @@
+{
+  "name": "@foile/crypto-pay-api",
+  "version": "1.0.4",
+  "description": "Cryptocurrency payment system based on @CryptoBot",
+  "license": "MIT",
+  "author": "Foile",
+  "main": "src/crypto-pay.js",
+  "homepage": "https://github.com/Foile/crypto-pay-api#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Foile/crypto-pay-api.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Foile/crypto-pay-api/issues"
+  },
+  "scripts": {
+    "prettier": "prettier src examples -w",
+    "lint": "eslint .",
+    "test": "ava"
+  },
+  "keywords": [
+    "cryptopay",
+    "crypto",
+    "api",
+    "bot",
+    "telegram"
+  ],
+  "dependencies": {
+    "node-fetch": "^2.6.7"
+  },
+  "devDependencies": {
+    "ava": "^4.3.3",
+    "eslint": "^8.24.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "prettier": "^2.7.1"
+  },
+  "prettier": {
+    "printWidth": 120,
+    "singleQuote": true,
+    "trailingComma": "all",
+    "semi": true
+  }
+}
