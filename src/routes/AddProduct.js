@@ -1,7 +1,6 @@
 import React from 'react';
 import './Routes.css';
 
-import NoDelivery from '../icons/no_delivery.svg';
 import Example from '../images/primer.png';
 
 function AddProduct() {
