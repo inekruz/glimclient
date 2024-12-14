@@ -81,8 +81,8 @@ function Auth({ setToken }) {
             }
 
             const data = await response.json();
-            setToken(data.token); // Устанавливаем токен
-            localStorage.setItem('token', data.token); // Сохраняем токен в localStorage
+            setToken(data.token);
+            localStorage.setItem('token', data.token);
             setSuccessMessage('Вход выполнен успешно!');
             setShowSuccess(true);
             setFormData({
@@ -90,6 +90,7 @@ function Auth({ setToken }) {
                password: '',
             });
             setShowError(false);
+            window.location.reload();
          } catch (error) {
             setError(error.message);
             setShowError(true);
@@ -126,8 +127,8 @@ function Auth({ setToken }) {
             }
 
             const data = await response.json();
-            setToken(data.token); // Устанавливаем токен
-            localStorage.setItem('token', data.token); // Сохраняем ток ен в localStorage
+            setToken(data.token);
+            localStorage.setItem('token', data.token);
             setSuccessMessage('Регистрация прошла успешно!');
             setShowSuccess(true);
             setFormData({
@@ -140,6 +141,7 @@ function Auth({ setToken }) {
                role: 'Покупатель',
             });
             setShowError(false);
+            window.location.reload();
          } catch (error) {
             setError(error.message);
             setShowError(true);
