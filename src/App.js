@@ -17,6 +17,7 @@ import MenuMain from './icons/main_menu.svg';
 import MenuDelivery from './icons/delivery_menu.svg';
 import MenuLike from './icons/menu_like.svg';
 import MenuAdd from './icons/menu_add.svg';
+import ExitIcon from './icons/exit.svg';
 
 function App() {
   const [token, setToken] = useState(localStorage.getItem('token')); // Получаем токен из localStorage
@@ -54,7 +55,9 @@ function App() {
               <Link to='/basket'>
                 <img src={BasketIcon} alt='basket' className='profile_button' />
               </Link>
-              <button onClick={handleLogout} className='logout_button'>Выйти</button> {/* Кнопка Выйти */}
+              <button onClick={handleLogout} className='logout_button'>
+                <img src={ExitIcon} alt='exit' className='exit_icon' /> {/* Используем иконку вместо текста */}
+              </button>
             </div>
           </div>
         </header>
