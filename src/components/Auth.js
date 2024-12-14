@@ -51,6 +51,21 @@ function Auth() {
     e.preventDefault();
     const validationError = validateForm();
     if (validationError) {
+      setError(validationError);
+      setShowError(true);
+    } else {
+      if (isLogin) {
+        await handleLogin(e);
+      } else {
+        await handleRegistration(e);
+      }
+    }
+  };
+  
+  const handleRegistration = async (e) => {
+    e.preventDefault();
+    const validationError = validateForm();
+    if (validationError) {
        setError(validationError);
        setShowError(true);
     } else {
@@ -94,6 +109,37 @@ function Auth() {
     }
  };
 
+ const handleLogin = async (e) => {
+  e.preventDefault();
+  try {
+    const response = await fetch('https://api.glimshop.ru/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        login: formData.username,
+        password: formData.password,
+      }),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.error || 'Ошибка при входе!');
+    }
+
+    setSuccessMessage('Вход выполнен успешно!');
+    setShowSuccess(true);
+    setFormData({
+      username: '',
+      password: '',
+    });
+    setShowError(false);
+  } catch (error) {
+    setError(error.message);
+    setShowError(true);
+  }
+};
    return (
       <div className='enter_acc'>
          <div className='enter_acc_container'>
