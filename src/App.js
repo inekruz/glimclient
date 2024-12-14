@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import './App.css';
-import { Link, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
+import { Link, Route, Routes, useLocation} from 'react-router-dom';
 
 import Auth from './components/Auth';
 import Main from './routes/Main';
@@ -22,7 +22,6 @@ function App() {
   const [token, setToken] = useState(localStorage.getItem('token')); // Получаем токен из localStorage
   const location = useLocation();
   const [locationPopup, setLocationPopup] = useState(false);
-  const navigate = useNavigate(); // Хук для навигации
 
   if (!token) {
     return <Auth setToken={setToken} />;
