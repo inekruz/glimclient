@@ -142,7 +142,7 @@ function Auth() {
    };
 
    const handleSubmit = async (e) => {
-      e .preventDefault();
+      e.preventDefault();
       if (isLogin) {
          await handleLogin(e);
       } else {
