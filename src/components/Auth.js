@@ -153,8 +153,8 @@ function Auth() {
    return (
       <div className='enter_acc'>
          <div className='enter_acc_container'>
-            {showError && <Notification message={error} onClose={() => setShowError(false)} />}
-            {showSuccess && <Notification message={successMessage} onClose={() => setShowSuccess(false)} />}
+         {showError && <Notification message={error} onClose={() => setShowError(false)} isSuccess={false} />}
+         {showSuccess && <Notification message={successMessage} onClose={() => setShowSuccess(false)} isSuccess={true} />}
             <form onSubmit={handleSubmit}>
                <h2 className='form_title'>{isLogin ? 'Вход' : 'Регистрация'}</h2>
                <div className='form_container'>
