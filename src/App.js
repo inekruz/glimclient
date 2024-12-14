@@ -20,7 +20,7 @@ import MenuAdd from './icons/menu_add.svg';
 
 function App() {
 
-  const token = true;
+  const token = false;
   
   const location = useLocation();
   const [locationPopup, setLocationPopup] = useState(false);

@@ -37,6 +37,18 @@ input[type=number] {
 
 /* ===================================================== */
 
+.toggle_form {
+  margin-top: 20px;
+  color: #F2890C;
+  cursor: pointer;
+  font-size: 14px;
+  transition: color .2s ease;
+}
+
+.toggle_form:hover {
+  color: #c8730b;
+}
+
 .enter_acc {
   height: 100vh;
   display: flex;
@@ -107,6 +119,16 @@ input[type=number] {
   transition: background-color .2s ease;
 }
 
+.error_notification {
+  background-color: #ffcccc;
+  color: #d8000c;
+  padding: 10px;
+  border-radius: 5px;
+  margin: 0 auto;
+  position: fixed;
+  text-align: center;
+  transition: opacity 0.5s ease;
+}
 /* ===================================================== */
 
 header {
