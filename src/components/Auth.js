@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import '../App.css';
 import Notification from './Notification';
 
-function Auth() {
+function Auth({ setToken }) {
    const [isLogin, setIsLogin] = useState(false);
    const [formData, setFormData] = useState({
       username: '',
@@ -80,6 +80,9 @@ function Auth() {
                throw new Error(errorData.error || 'Ошибка при входе');
             }
 
+            const data = await response.json();
+            setToken(data.token); // Устанавливаем токен
+            localStorage.setItem('token', data.token); // Сохраняем токен в localStorage
             setSuccessMessage('Вход выполнен успешно!');
             setShowSuccess(true);
             setFormData({
@@ -122,6 +125,9 @@ function Auth() {
                throw new Error(errorData.error || 'Ошибка при регистрации');
             }
 
+            const data = await response.json();
+            setToken(data.token); // Устанавливаем токен
+            localStorage.setItem('token', data.token); // Сохраняем ток ен в localStorage
             setSuccessMessage('Регистрация прошла успешно!');
             setShowSuccess(true);
             setFormData({
