@@ -24,6 +24,13 @@ function App() {
   const location = useLocation();
   const [locationPopup, setLocationPopup] = useState(false);
 
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('username');
+    setToken(null);
+    setUsername(null);
+  };
+
   if (!token) {
     return <Auth setToken={setToken} setUsername={setUsername} />;
   } else {
@@ -47,6 +54,7 @@ function App() {
               <Link to='/basket'>
                 <img src={BasketIcon} alt='basket' className='profile_button' />
               </Link>
+              <button onClick={handleLogout} className='logout_button'>Выйти</button> {/* Кнопка Выйти */}
             </div>
           </div>
         </header>
@@ -83,7 +91,7 @@ function App() {
             <Link to='/addproduct' className={`nav_menu_list_item ${location.pathname === '/addproduct' ? 'active' : ''}`}>
               <li className='nav_menu_list_item_container'>
                 <div className='menu_icon_container'>
-                  <img alt='Иконка меню' src={MenuAdd} className='menu_icon' />
+                  <img alt='Иконка меню' src={MenuAdd} className='menu _icon' />
                 </div>
                 <p>Добавить товар (это для продавцов)</p>
               </li>
@@ -94,7 +102,7 @@ function App() {
         <div className='content'>
           <div className={`location_popup ${locationPopup ? 'active' : ''}`}>
             <p></p>
-            <p>ул. Фабр ичная, 9</p>
+            <p>ул. Фабричная, 9</p>
             <Link to='/profile' className='location_popup _link'>
               Изменить?
             </Link>
