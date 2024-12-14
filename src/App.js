@@ -55,8 +55,8 @@ function App() {
               <Link to='/basket'>
                 <img src={BasketIcon} alt='basket' className='profile_button' />
               </Link>
-              <button onClick={handleLogout} className='logout_button'>
-                <img src={ExitIcon} alt='exit' className='exit_icon' /> {/* Используем иконку вместо текста */}
+              <button onClick={handleLogout} className='profile_button'>
+                <img src={ExitIcon} alt='exit' className='profile_button' /> {/* Используем иконку вместо текста */}
               </button>
             </div>
           </div>
