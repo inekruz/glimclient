@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './App.css';
-import { Link, Route, Routes, useLocation} from 'react-router-dom';
+import { Link, Route, Routes, useLocation } from 'react-router-dom';
 
 import Auth from './components/Auth';
 import Main from './routes/Main';
@@ -20,11 +20,12 @@ import MenuAdd from './icons/menu_add.svg';
 
 function App() {
   const [token, setToken] = useState(localStorage.getItem('token')); // Получаем токен из localStorage
+  const [username, setUsername] = useState(localStorage.getItem('username')); // Получаем логин из localStorage
   const location = useLocation();
   const [locationPopup, setLocationPopup] = useState(false);
 
   if (!token) {
-    return <Auth setToken={setToken} />;
+    return <Auth setToken={setToken} setUsername={setUsername} />;
   } else {
     return (
       <div className="App">
@@ -93,13 +94,13 @@ function App() {
         <div className='content'>
           <div className={`location_popup ${locationPopup ? 'active' : ''}`}>
             <p></p>
-            <p>ул. Фабричная, 9</p>
+            <p>ул. Фабр ичная, 9</p>
             <Link to='/profile' className='location_popup _link'>
               Изменить?
             </Link>
           </div>
           <Routes>
-            <Route path='/profile' element={<Profile />} />
+            <Route path='/profile' element={<Profile username={username} />} />
             <Route path='/' element={<Main />} />
             <Route path='/basket' element={<Basket />} />
             <Route path='/favorite' element={<Favorite />} />

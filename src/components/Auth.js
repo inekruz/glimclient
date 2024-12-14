@@ -60,95 +60,96 @@ function Auth({ setToken }) {
       e.preventDefault();
       const validationError = validateForm();
       if (validationError) {
-         setError(validationError);
-         setShowError(true);
+        setError(validationError);
+        setShowError(true);
       } else {
-         try {
-            const response = await fetch('https://api.glimshop.ru/login', {
-               method: 'POST',
-               headers: {
-                  'Content-Type': 'application/json',
-               },
-               body: JSON.stringify({
-                  login: formData.username,
-                  password: formData.password,
-               }),
-            });
-
-            if (!response.ok) {
-               const errorData = await response.json();
-               throw new Error(errorData.error || 'Ошибка при входе');
-            }
-
-            const data = await response.json();
-            setToken(data.token);
-            localStorage.setItem('token', data.token);
-            setSuccessMessage('Вход выполнен успешно!');
-            setShowSuccess(true);
-            setFormData({
-               username: '',
-               password: '',
-            });
-            setShowError(false);
-            window.location.reload();
-         } catch (error) {
-            setError(error.message);
-            setShowError(true);
-         }
+        try {
+          const response = await fetch('https://api.glimshop.ru/login', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              login: formData.username,
+              password: formData.password,
+            }),
+          });
+    
+          if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.error || 'Ошибка при входе');
+          }
+    
+          const data = await response.json();
+          setToken(data.token);
+          localStorage.setItem('token', data.token);
+          localStorage.setItem('username', formData.username); // Сохраняем логин в localStorage
+          setSuccessMessage('Вход выполнен успешно!');
+          setShowSuccess(true);
+          setFormData({
+            username: '',
+            password: '',
+          });
+          setShowError(false);
+          window.location.reload();
+        } catch (error) {
+          setError(error.message);
+          setShowError(true);
+        }
       }
-   };
-
-   const handleRegistration = async (e) => {
+    };
+    
+    const handleRegistration = async (e) => {
       e.preventDefault();
       const validationError = validateForm();
       if (validationError) {
-         setError(validationError);
-         setShowError(true);
+        setError(validationError);
+        setShowError(true);
       } else {
-         try {
-            const response = await fetch('https://api.glimshop.ru/addUser ', {
-               method: 'POST',
-               headers: {
-                  'Content-Type': 'application/json',
-               },
-               body: JSON.stringify({
-                  login: formData.username,
-                  fullname: formData.fullName,
-                  address: formData.address,
-                  phone_number: formData.phone,
-                  password: formData.password,
-                  role: formData.role,
-               }),
-            });
-
-            if (!response.ok) {
-               const errorData = await response.json();
-               throw new Error(errorData.error || 'Ошибка при регистрации');
-            }
-
-            const data = await response.json();
-            setToken(data.token);
-            localStorage.setItem('token', data.token);
-            setSuccessMessage('Регистрация прошла успешно!');
-            setShowSuccess(true);
-            setFormData({
-               username: '',
-               fullName: '',
-               address: '',
-               phone: '',
-               password: '',
-               confirmPassword: '',
-               role: 'Покупатель',
-            });
-            setShowError(false);
-            window.location.reload();
-         } catch (error) {
-            setError(error.message);
-            setShowError(true);
-         }
+        try {
+          const response = await fetch('https://api.glimshop.ru/addUser ', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              login: formData.username,
+              fullname: formData.fullName,
+              address: formData.address,
+              phone_number: formData.phone,
+              password: formData.password,
+              role: formData.role,
+            }),
+          });
+    
+          if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.error || 'Ошибка при регистрации');
+          }
+    
+          const data = await response.json();
+          setToken(data.token);
+          localStorage.setItem('token', data.token);
+          localStorage.setItem('username', formData.username); // Сохраняем логин в localStorage
+          setSuccessMessage('Регистрация прошла успешно!');
+          setShowSuccess(true);
+          setFormData({
+            username: '',
+            fullName: '',
+            address: '',
+            phone: '',
+            password: '',
+            confirmPassword: '',
+            role: 'Покупатель',
+          });
+          setShowError(false);
+          window.location.reload();
+        } catch (error) {
+          setError(error.message);
+          setShowError(true);
+        }
       }
-   };
-
+    };
    const handleSubmit = async (e) => {
       e.preventDefault();
       if (isLogin) {
