@@ -1,270 +1,116 @@
 import React, { useState } from 'react';
-import '../App.css';
-import Notification from './Notification';
+import './App.css';
+import { Link, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 
-function Auth({ setToken }) {
-   const [isLogin, setIsLogin] = useState(false);
-   const [formData, setFormData] = useState({
-      username: '',
-      fullName: '',
-      address: '',
-      phone: '',
-      password: '',
-      confirmPassword: '',
-      role: 'Покупатель',
-   });
-   const [error, setError] = useState('');
-   const [showError, setShowError] = useState(false);
-   const [successMessage, setSuccessMessage] = useState('');
-   const [showSuccess, setShowSuccess] = useState(false);
+import Auth from './components/Auth';
+import Main from './routes/Main';
+import Basket from './routes/Basket';
+import Profile from './routes/Profile';
+import Favorite from './routes/Favorite';
+import Delivery from './routes/Delivery';
+import AddProduct from './routes/AddProduct';
 
-   const toggleForm = () => {
-      setIsLogin(!isLogin);
-      setError('');
-      setSuccessMessage('');
-   };
+import ProfileIcon from './icons/profile.svg';
+import BasketIcon from './icons/basket.svg';
+import LocationIcon from './icons/location.svg';
+import MenuMain from './icons/main_menu.svg';
+import MenuDelivery from './icons/delivery_menu.svg';
+import MenuLike from './icons/menu_like.svg';
+import MenuAdd from './icons/menu_add.svg';
 
-   const handleChange = (e) => {
-      const { name, value } = e.target;
-      setFormData({ ...formData, [name]: value });
-   };
+function App() {
+  const [token, setToken] = useState(localStorage.getItem('token')); // Получаем токен из localStorage
+  const location = useLocation();
+  const [locationPopup, setLocationPopup] = useState(false);
+  const navigate = useNavigate(); // Хук для навигации
 
-   const validateForm = () => {
-      const { fullName, phone, password, confirmPassword } = formData;
+  if (!token) {
+    return <Auth setToken={setToken} />;
+  } else {
+    return (
+      <div className="App">
+        <header>
+          <div className='header_container'>
+            <div>
+              <Link to='/'>
+                <p className='logo'>Stecenco</p>
+              </Link>
+            </div>
 
-      if (!isLogin) {
-         if (!/^[a-zA-Zа-яА-ЯёЁ\s]+$/.test(fullName)) {
-            return 'ФИО должно содержать только буквы.';
-         }
-         if (!/^\d+$/.test(phone)) {
-            return 'Номер телефона должен содержать только цифры.';
-         }
-         if (password.length < 6) {
-            return 'Пароль должен содержать более 6 символов.';
-         }
-         if (password !== confirmPassword) {
-            return 'Пароли не совпадают.';
-         }
-      } else {
-         if (!formData.username) {
-            return 'Логин не может быть пустым!';
-         }
-         if (password.length < 6) {
-            return 'Пароль должен содержать более 6 символов.';
-         }
-      }
-      return '';
-   };
+            <input placeholder='Поиск' />
 
-   const handleLogin = async (e) => {
-      e.preventDefault();
-      const validationError = validateForm();
-      if (validationError) {
-         setError(validationError);
-         setShowError(true);
-      } else {
-         try {
-            const response = await fetch('https://api.glimshop.ru/login', {
-               method: 'POST',
-               headers: {
-                  'Content-Type': 'application/json',
-               },
-               body: JSON.stringify({
-                  login: formData.username,
-                  password: formData.password,
-               }),
-            });
+            <div>
+              <Link to='/profile'>
+                <img src={ProfileIcon} alt='profile' className='profile_button' />
+              </Link>
+              <img src={LocationIcon} alt='location' className='profile_button' onClick={() => setLocationPopup(prev => !prev)} />
+              <Link to='/basket'>
+                <img src={BasketIcon} alt='basket' className='profile_button' />
+              </Link>
+            </div>
+          </div>
+        </header>
 
-            if (!response.ok) {
-               const errorData = await response.json();
-               throw new Error(errorData.error || 'Ошибка при входе');
-            }
+        <div className='nav_menu'>
+          <ul className='nav_menu_list'>
+            <Link to='/' className={`nav_menu_list_item ${location.pathname === '/' ? 'active' : ''}`}>
+              <li className='nav_menu_list_item_container'>
+                <div className='menu_icon_container'>
+                  <img alt='Иконка меню' src={MenuMain} className='menu_icon' />
+                </div>
+                <p>Главная</p>
+              </li>
+            </Link>
 
-            const data = await response.json();
-            setToken(data.token); // Устанавливаем токен
-            localStorage.setItem('token', data.token); // Сохраняем токен в localStorage
-            setSuccessMessage('Вход выполнен успешно!');
-            setShowSuccess(true);
-            setFormData({
-               username: '',
-               password: '',
-            });
-            setShowError(false);
-         } catch (error) {
-            setError(error.message);
-            setShowError(true);
-         }
-      }
-   };
+            <Link to='/favorite' className={`nav_menu_list_item ${location.pathname === '/favorite' ? 'active' : ''}`}>
+              <li className='nav_menu_list_item_container'>
+                <div className='menu_icon_container'>
+                  <img alt='Иконка меню' src={MenuLike} className='menu_icon' />
+                </div>
+                <p>Отложенное</p>
+              </li>
+            </Link>
 
-   const handleRegistration = async (e) => {
-      e.preventDefault();
-      const validationError = validateForm();
-      if (validationError) {
-         setError(validationError);
-         setShowError(true);
-      } else {
-         try {
-            const response = await fetch('https://api.glimshop.ru/addUser ', {
-               method: 'POST',
-               headers: {
-                  'Content-Type': 'application/json',
-               },
-               body: JSON.stringify({
-                  login: formData.username,
-                  fullname: formData.fullName,
-                  address: formData.address,
-                  phone_number: formData.phone,
-                  password: formData.password,
-                  role: formData.role,
-               }),
-            });
+            <Link to='/delivery' className={`nav_menu_list_item ${location.pathname === '/delivery' ? 'active' : ''}`}>
+              <li className='nav_menu_list_item_container'>
+                <div className='menu_icon_container'>
+                  <img alt='Иконка меню' src={MenuDelivery} className='menu_icon' />
+                </div>
+                <p>Доставки</p>
+              </li>
+            </Link>
 
-            if (!response.ok) {
-               const errorData = await response.json();
-               throw new Error(errorData.error || 'Ошибка при регистрации');
-            }
+            <Link to='/addproduct' className={`nav_menu_list_item ${location.pathname === '/addproduct' ? 'active' : ''}`}>
+              <li className='nav_menu_list_item_container'>
+                <div className='menu_icon_container'>
+                  <img alt='Иконка меню' src={MenuAdd} className='menu_icon' />
+                </div>
+                <p>Добавить товар (это для продавцов)</p>
+              </li>
+            </Link>
+          </ul>
+        </div>
 
-            const data = await response.json();
-            setToken(data.token); // Устанавливаем токен
-            localStorage.setItem('token', data.token); // Сохраняем ток ен в localStorage
-            setSuccessMessage('Регистрация прошла успешно!');
-            setShowSuccess(true);
-            setFormData({
-               username: '',
-               fullName: '',
-               address: '',
-               phone: '',
-               password: '',
-               confirmPassword: '',
-               role: 'Покупатель',
-            });
-            setShowError(false);
-         } catch (error) {
-            setError(error.message);
-            setShowError(true);
-         }
-      }
-   };
-
-   const handleSubmit = async (e) => {
-      e.preventDefault();
-      if (isLogin) {
-         await handleLogin(e);
-      } else {
-         await handleRegistration(e);
-      }
-   };
-
-   return (
-      <div className='enter_acc'>
-         <div className='enter_acc_container'>
-         {showError && <Notification message={error} onClose={() => setShowError(false)} isSuccess={false} />}
-         {showSuccess && <Notification message={successMessage} onClose={() => setShowSuccess(false)} isSuccess={true} />}
-            <form onSubmit={handleSubmit}>
-               <h2 className='form_title'>{isLogin ? 'Вход' : 'Регистрация'}</h2>
-               <div className='form_container'>
-                  {isLogin ? (
-                     <>
-                        <legend>Логин</legend>
-                        <input
-                           name='username'
-                           value={formData.username}
-                           onChange={handleChange}
-                           placeholder=''
-                           type='text'
-                           required
-                        />
-
-                        <legend>Пароль</legend>
-                        <input
-                           name='password'
-                           value={formData.password}
-                           onChange={handleChange}
-                           placeholder=''
-                           type='password'
-                           required
-                        />
-                     </>
-                  ) : (
-                     <>
-                        <legend>Логин</legend>
-                        <input
-                           name='username'
-                           value={formData.username}
-                           onChange={handleChange}
-                           placeholder=''
-                           type='text'
-                           required
-                        />
-
-                        <legend>ФИО</legend>
-                        <input
-                           name='fullName'
-                           value={formData.fullName}
-                           onChange={handleChange}
-                           placeholder=''
-                           type='text'
-                           required
-                        />
-
-                        <legend>Домашний адрес</legend>
-                        <input
-                           name='address'
-                           value={formData.address}
-                           onChange={handleChange}
-                           placeholder=''
-                           type='text'
-                           required
-                        />
-
-                        <legend>Номер телефона</legend>
-                        <input
-                           name='phone'
-                           value={formData.phone}
-                           onChange={handleChange}
-                           placeholder=''
-                           type='text'
-                           required
-                        />
-
-                        <legend>Пароль</legend>
-                        <input
-                           name='password'
-                           value={formData.password}
-                           onChange={handleChange}
-                           placeholder=''
-                           type='password'
-                           required
-                        />
-
-                        <legend>Подтвердите пароль</legend>
-                        <input
-                           name='confirmPassword'
-                           value={formData.confirmPassword}
-                           onChange={handleChange}
-                           placeholder=''
-                           type='password'
-                           required
-                        />
-
-                        <legend>Роль</legend>
-                        <select name='role' value={formData.role} onChange={handleChange} className='role _select'>
-                           <option>Покупатель</option>
-                           <option>Продавец</option>
-                        </select>
-                     </>
-                  )}
-               </div>
-
-               <button className='auth_button'>{isLogin ? 'Войти' : 'Регистрация'}</button>
-               <p className='toggle_form' onClick={toggleForm}>
-                  {isLogin ? 'Нет аккаунта? Зарегистрируйтесь' : 'Уже есть аккаунт? Войдите'}
-               </p>
-            </form>
-         </div>
+        <div className='content'>
+          <div className={`location_popup ${locationPopup ? 'active' : ''}`}>
+            <p></p>
+            <p>ул. Фабричная, 9</p>
+            <Link to='/profile' className='location_popup _link'>
+              Изменить?
+            </Link>
+          </div>
+          <Routes>
+            <Route path='/profile' element={<Profile />} />
+            <Route path='/' element={<Main />} />
+            <Route path='/basket' element={<Basket />} />
+            <Route path='/favorite' element={<Favorite />} />
+            <Route path='/delivery' element={<Delivery />} />
+            <Route path='/addproduct' element={<AddProduct />} />
+          </Routes>
+        </div>
       </div>
-   );
+    );
+  }
 }
 
-export default Auth;
+export default App;
