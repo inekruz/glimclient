@@ -4,9 +4,11 @@
 }
 
 body {
-  background-color: #00000050;
+  /* background-color: #00000050; */
   font-family: "Roboto", sans-serif;
   overflow: hidden;
+  background: -webkit-linear-gradient(180deg,#5965f8,#4338a1,#231253); 
+  background: linear-gradient(180deg,#5965f8,#4338a1,#231253);
 }
 
 input {
