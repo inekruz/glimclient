@@ -12,6 +12,15 @@ const products = [
       price: '392',
       name: 'Корзина еды',
       category: 'Еда',
+      status: 'В пути',
+   },
+   {
+      id: 2,
+      image: Example,
+      price: '392',
+      name: 'Корзина еды',
+      category: 'Еда',
+      status: 'Забери',
    }
 ];
 
@@ -40,7 +49,7 @@ function Delivery() {
 
             <ul className='main_products_list'>
             {products.map(product => (
-               <li key={product.id} className='fav_list_item'>
+               <li key={product.id} className='delivery_list_item'>
                   <div className='fav_list_item_container'>
                      <img className='main_products_image fav_products_image' alt='Изображение товара' src={product.image} />
                      <div className='fav_list_item_desc'>
@@ -51,7 +60,7 @@ function Delivery() {
                         <p className='price white'>{product.price} ₽</p>
                      </div>
                      <div className='white'>
-                        <p>В пути</p>
+                        <p className='status_display'>{product.status}</p>
                      </div>
                   </div>
                </li>

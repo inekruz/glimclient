@@ -35,7 +35,7 @@ function App() {
     setRole(null);
   };
 
-  if (!token) {
+  if (token) {
     return <Auth setToken={setToken} setUsername={setUsername} setRole={setRole} />;
   } else {
     return (
@@ -58,9 +58,7 @@ function App() {
               <Link to='/basket'>
                 <img src={BasketIcon} alt='basket' className='profile_button' />
               </Link>
-              <button onClick={handleLogout} className='profile_button'>
-                <img src={ExitIcon} alt='exit' className='profile_button' /> {/* Используем иконку вместо текста */}
-              </button>
+                <img src={ExitIcon} alt='exit' className='profile_button' onClick={handleLogout}  /> {/* Используем иконку вместо текста */}
             </div>
           </div>
         </header>

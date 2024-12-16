@@ -147,7 +147,7 @@ header {
 }
 
 .header_container div {
-  width: 150px;
+  width: 300px;
   user-select: none;
   text-align: center;
 }

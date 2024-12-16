@@ -37,9 +37,17 @@ function Main() {
       fetchProducts();
    }, []);
 
+
    return (
       <div className='route main_route'>
          <h2 className='route_title'>Товары</h2>
+
+         <div className='main_header'>
+            <p>Сортировать по:</p>
+            <p className='main_header_item'>Названию</p>    {/* onClick сюда  */}
+            <p className='main_header_item'>Цене</p>        {/* onClick сюда  */}
+            <p className='main_header_item'>Категории</p>   {/* onClick сюда  */}
+         </div>
 
          <ul className='main_products_list'>
             {products.map(product => (
