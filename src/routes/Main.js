@@ -1,19 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './Routes.css';
-
 import Example from '../images/primer.png';
 
-const products = [
-   {
-      id: 1,
-      image: Example,
-      price: '392',
-      name: 'Корзина еды',
-      category: 'Еда',
-   }
-];
-
 function Main() {
+   const [products, setProducts] = useState([]);
    const [likedProducts, setLikedProducts] = useState({});
 
    const setLike = (id) => {
@@ -23,6 +13,30 @@ function Main() {
       }));
    };
 
+   const fetchProducts = async () => {
+      try {
+         const response = await fetch('https://api.glimshop.ru/getProducts', {
+            method: 'POST',
+            headers: {
+               'Content-Type': 'application/json',
+            },
+         });
+
+         if (!response.ok) {
+            throw new Error('Ошибка при получении товаров');
+         }
+
+         const data = await response.json();
+         setProducts(data);
+      } catch (error) {
+         console.error('Ошибка:', error);
+      }
+   };
+
+   useEffect(() => {
+      fetchProducts();
+   }, []);
+
    return (
       <div className='route main_route'>
          <h2 className='route_title'>Товары</h2>
@@ -30,7 +44,7 @@ function Main() {
          <ul className='main_products_list'>
             {products.map(product => (
                <li key={product.id} className='main_products_list_item'>
-                  <img className='main_products_image' alt='Изображение товара' src={product.image} />
+                  <img className='main_products_image' alt='Изображение товара' src={Example} /> {/* Замените на product.photo_id, если у вас есть URL изображения */}
 
                   <div className='product_info'>
                      <div className='product_info_container'>
