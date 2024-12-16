@@ -12,7 +12,15 @@ function Profile() {
    useEffect(() => {
       const fetchUserData = async () => {
          try {
-            const response = await fetch(`https://api.glimshop.ru/getUser?username=${username}`);
+            const response = await fetch('https://api.glimshop.ru/getUser', {
+               method: 'POST',
+               headers: {
+                 'Content-Type': 'application/json',
+               },
+               body: JSON.stringify({
+                 login: username
+               }),
+             });
             if (!response.ok) {
                throw new Error('Network response was not ok');
             }
