@@ -12,15 +12,12 @@ function Profile() {
    useEffect(() => {
       const fetchUserData = async () => {
          try {
-            const response = await fetch('https://api.glimshop.ru/getUser', {
-               method: 'POST',
+            const response = await fetch(`https://api.glimshop.ru/getUser?login=${username}`, {
+               method: 'GET',
                headers: {
                  'Content-Type': 'application/json',
                },
-               body: JSON.stringify({
-                 login: username
-               }),
-             });
+            });
             if (!response.ok) {
                throw new Error('Network response was not ok');
             }
@@ -106,11 +103,6 @@ function Profile() {
                         <div className='profile_settings_column_param'>
                            <p>Роль</p>
                            <span>{userData ? userData.role : 'Загрузка...'}</span>
-                        </div>
-
-                        <div className='profile_settings_column_param'>
-                           <p>Пароль</p>
-                           <span>{userData ? userData.password : 'Загрузка...'}</span>
                         </div>
                      </div>
                   </div>
