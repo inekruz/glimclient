@@ -20,20 +20,23 @@ import MenuAdd from './icons/menu_add.svg';
 import ExitIcon from './icons/exit.svg';
 
 function App() {
-  const [token, setToken] = useState(localStorage.getItem('token')); // Получаем токен из localStorage
-  const [username, setUsername] = useState(localStorage.getItem('username')); // Получаем логин из localStorage
+  const [token, setToken] = useState(localStorage.getItem('token'));
+  const [username, setUsername] = useState(localStorage.getItem('username'));
+  const [role, setRole] = useState(localStorage.getItem('role'));
   const location = useLocation();
   const [locationPopup, setLocationPopup] = useState(false);
 
   const handleLogout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('username');
+    localStorage.removeItem('role');
     setToken(null);
     setUsername(null);
+    setRole(null);
   };
 
   if (!token) {
-    return <Auth setToken={setToken} setUsername={setUsername} />;
+    return <Auth setToken={setToken} setUsername={setUsername} setRole={setRole} />;
   } else {
     return (
       <div className="App">
@@ -91,14 +94,16 @@ function App() {
               </li>
             </Link>
 
-            <Link to='/addproduct' className={`nav_menu_list_item ${location.pathname === '/addproduct' ? 'active' : ''}`}>
-              <li className='nav_menu_list_item_container'>
-                <div className='menu_icon_container'>
-                  <img alt='Иконка меню' src={MenuAdd} className='menu _icon' />
-                </div>
-                <p>Добавить товар (это для продавцов)</p>
-              </li>
-            </Link>
+            {role === 'Продавец' && ( // Проверка роли
+              <Link to='/addproduct' className={`nav_menu_list_item ${location.pathname === '/addproduct' ? 'active' : ''}`}>
+                <li className='nav_menu_list_item_container'>
+                  <div className='menu_icon_container'>
+                    <img alt='Иконка меню' src={MenuAdd} className='menu_icon' />
+                  </div>
+                  <p>Добавить товар</p>
+                </li>
+              </Link>
+            )}
           </ul>
         </div>
 
@@ -106,7 +111,7 @@ function App() {
           <div className={`location_popup ${locationPopup ? 'active' : ''}`}>
             <p></p>
             <p>ул. Фабричная, 9</p>
-            <Link to='/profile' className='location_popup _link'>
+            <Link to='/profile' className='location_popup_link'>
               Изменить?
             </Link>
           </div>

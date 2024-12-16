@@ -83,7 +83,8 @@ function Auth({ setToken }) {
           const data = await response.json();
           setToken(data.token);
           localStorage.setItem('token', data.token);
-          localStorage.setItem('username', formData.username); // Сохраняем логин в localStorage
+          localStorage.setItem('username', formData.username);
+          localStorage.setItem('role', formData.role);
           setSuccessMessage('Вход выполнен успешно!');
           setShowSuccess(true);
           setFormData({
@@ -130,7 +131,8 @@ function Auth({ setToken }) {
           const data = await response.json();
           setToken(data.token);
           localStorage.setItem('token', data.token);
-          localStorage.setItem('username', formData.username); // Сохраняем логин в localStorage
+          localStorage.setItem('username', formData.username);
+          localStorage.setItem('role', formData.role);
           setSuccessMessage('Регистрация прошла успешно!');
           setShowSuccess(true);
           setFormData({
