@@ -1,12 +1,30 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './Routes.css';
 
 import DefaultProfileImage from '../icons/photo.svg';
 import CrossImage from '../icons/cross.svg';
 
 function Profile() {
-
    const [popup, setPopup] = useState(false);
+   const [userData, setUserData] = useState(null);
+   const username = useState(localStorage.getItem('username'));
+
+   useEffect(() => {
+      const fetchUserData = async () => {
+         try {
+            const response = await fetch(`https://api.glimshop.ru/getUser?username=${username}`);
+            if (!response.ok) {
+               throw new Error('Network response was not ok');
+            }
+            const data = await response.json();
+            setUserData(data);
+         } catch (error) {
+            console.error('Error fetching user data:', error);
+         }
+      };
+
+      fetchUserData();
+   }, [username]);
 
    return (
       <div className='route'>
@@ -20,29 +38,29 @@ function Profile() {
                   <img alt='profile_photo' src={DefaultProfileImage} className='profile_photo' />
 
                   <div className='about'>
-                     <p className='profile_name'>Некруз Икромов</p>
-                     <p className='profile_status'>Покупатель</p>
+                     <p className='profile_name'>{userData ? userData.fullName : 'Загрузка...'}</p>
+                     <p className='profile_status'>{userData ? userData.role : 'Загрузка...'}</p>
                   </div>
 
                   <div className='profile_statistics'>
                      <div className='profile_statistics_item'>
                         <p className='profile_stat_name'>Товаров в избранном: </p>
                         <div>
-                           <p className='profile_status'>17</p>
+                           <p className='profile_status'>{userData ? userData.favoriteItemsCount : 'Загрузка...'}</p>
                         </div>
                      </div>
 
                      <div className='profile_statistics_item'>
                         <p className='profile_stat_name'>Товаров в пути: </p>
                         <div>
-                           <p className='profile_status'>4</p>
+                           <p className='profile_status'>{userData ? userData.itemsInTransitCount : 'Загрузка...'}</p>
                         </div>
                      </div>
 
                      <div className='profile_statistics_item'>
                         <p className='profile_stat_name'>Ещё что-то: </p>
                         <div>
-                           <p className='profile_status'>44</p>
+                           <p className='profile_status'>{userData ? userData.otherCount : 'Загрузка...'}</p>
                         </div>
                      </div>
                   </div>
@@ -57,34 +75,34 @@ function Profile() {
                      <div className='profile_settings_column'>
                         <div className='profile_settings_column_param'>
                            <p>ФИО</p>
-                           <span>Некруз Икромов</span>
+                           <span>{userData ? userData.fullName : 'Загрузка...'}</span>
                         </div>
 
                         <div className='profile_settings_column_param'>
                            <p>Логин</p>
-                           <span>@inekruz</span>
+                           <span>{userData ? userData.username : 'Загрузка...'}</span>
                         </div>
 
                         <div className='profile_settings_column_param'>
                            <p>Адрес</p>
-                           <span>ул. Фабричая, 9</span>
+                           <span>{userData ? userData.address : 'Загрузка...'}</span>
                         </div>
                      </div>
 
                      <div className='profile_settings_column'>
                         <div className='profile_settings_column_param'>
                            <p>Номер телефона</p>
-                           <span>+723455667</span>
+                           <span>{userData ? userData.phone : 'Загрузка...'}</span>
                         </div>
 
                         <div className='profile_settings_column_param'>
                            <p>Роль</p>
-                           <span>Покупатель</span>
+                           <span>{userData ? userData.role : 'Загрузка...'}</span>
                         </div>
 
                         <div className='profile_settings_column_param'>
                            <p>Пароль</p>
-                           <span>12416135612</span>
+                           <span>{userData ? userData.password : 'Загрузка...'}</span>
                         </div>
                      </div>
                   </div>
@@ -96,7 +114,7 @@ function Profile() {
             </div>
          </div>
 
-         <div className={`edit_acc ${popup ? 'active' : ''}`} onClick={() => setPopup(false)}>
+         <div className={`edit_acc ${popup ? 'active' : ''}`} onClick={() => setPopup(false )}>
             <div className='edit_acc_container' onClick={e => e.stopPropagation()}>
                <div className='edit_acc_header'>
                   <img alt='cross' src={CrossImage} onClick={() => setPopup(false)} />
@@ -110,6 +128,7 @@ function Profile() {
                        placeholder=''
                        type='text'
                        required
+                       defaultValue={userData ? userData.fullName : ''}
                      />
 
                      <legend>Домашний адрес</legend>
@@ -117,6 +136,7 @@ function Profile() {
                        placeholder=''
                        type='text'
                        required
+                       defaultValue={userData ? userData.address : ''}
                      />
 
                      <legend>Номер телефона</legend>
@@ -125,6 +145,7 @@ function Profile() {
                        type='number'
                        required
                        pattern="\d*"
+                       defaultValue={userData ? userData.phone : ''}
                      />
 
                      <legend>Пароль</legend>
@@ -142,7 +163,7 @@ function Profile() {
                      />
 
                      <legend>Роль</legend>
-                     <select className='role_select'>
+                     <select className='role_select' defaultValue={userData ? userData.role : 'Покупатель'}>
                        <option>Покупатель</option>
                        <option>Продавец</option>
                      </select>

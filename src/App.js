@@ -44,7 +44,7 @@ function App() {
           <div className='header_container'>
             <div>
               <Link to='/'>
-                <p className='logo'>Stecenco</p>
+                <p className='logo'>Glim Shop</p>
               </Link>
             </div>
 
