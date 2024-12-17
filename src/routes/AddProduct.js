@@ -1,9 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './Routes.css';
 
 import Example from '../images/primer.png';
 
 function AddProduct() {
+   const [productName, setProductName] = useState('Eda');
+   const [productCategory, setProductCategory] = useState('Еда');
+   const [productPrice, setProductPrice] = useState(392);
+
    return (
       <div className='route'>
          <h2 className='route_title'>Добавление товара</h2>
@@ -19,9 +23,9 @@ function AddProduct() {
 
                      <div className='product_info'>
                         <div className='product_info_container'>
-                           <p className='price'>392 ₽</p>
+                           <p className='price'>{productPrice} ₽</p>
                         </div>
-                        <p className='product_name'>Eda <b className='product_category orng'>/ Еда</b></p>
+                        <p className='product_name'>{productName} <b className='product_category orng'>/ {productCategory}</b></p>
                      </div>
 
                      <div className='buy_button_container'>
@@ -39,28 +43,35 @@ function AddProduct() {
                      <div className='profile_settings_column'>
                         <div className='profile_settings_column_param'>
                            <p>Название</p>
-                           <input type='text' value='Eda' className='add_product_param' />
+                           <input 
+                              type='text' 
+                              value={productName} 
+                              className='add_product_param' 
+                              onChange={(e) => setProductName(e.target.value)} 
+                           />
                         </div>
 
                         <div className='profile_settings_column_param'>
                            <p>Категория</p>
-                           <input type='text' value='Еда' className='add_product_param' />
+                           <input 
+                              type='text' 
+                              value={productCategory} 
+                              className='add_product_param' 
+                              onChange={(e) => setProductCategory(e.target.value)} 
+                           />
                         </div>
 
                         <div className='profile_settings_column_param'>
                            <p>Цена</p>
-                           <input type='number' value='392' className='add_product_param' />
+                           <input 
+                              type='number' 
+                              value={productPrice} 
+                              className='add_product_param' 
+                              onChange={(e) => setProductPrice(e.target.value)} 
+                           />
                         </div>
                      </div>
 
-                     <div className='profile_settings_column'>
-                        <div className='profile_settings_column_param'>
-                           <p>Картинка товара</p>
-                           <div>
-                              <input type='file' className='add_product_image' />
-                           </div>
-                        </div>
-                     </div>
                   </div>
 
                   <div className='edit_button'>
