@@ -42,6 +42,7 @@ function App() {
     const fetchAddress = async () => {
       if (username) {
         try {
+          console.log("adrrsss:", username);
           const response = await fetch('https://api.glimshop.ru/getAddress', {
             method: 'POST',
             headers: {
