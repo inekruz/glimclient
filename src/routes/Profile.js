@@ -67,9 +67,11 @@ function Profile() {
 
       const validationError = validateForm();
       if (validationError) {
-        setError(validationError);
-        setShowError(true);
+         setError(validationError);
+         setShowError(true);
+         return;
       }
+
       try {
          const response = await fetch('https://api.glimshop.ru/updUser', {
             method: 'POST',
@@ -89,6 +91,7 @@ function Profile() {
             throw new Error('Network response was not ok');
          }
          setSuccessMessage("Данные успешно обновлены!");
+         setShowSuccess(true);
          setPopup(false);
          setUserData((prevData) => ({
             ...prevData,
@@ -96,9 +99,11 @@ function Profile() {
             address,
             phone_number: phoneNumber,
          }));
-         setError('Ошибка при обновлении данных!');
+         setError('');
       } catch (error) {
          console.error('Error updating user data:', error);
+         setError('Ошибка при обновлении данных!');
+         setShowError(true);
       }
    };
 
@@ -116,7 +121,7 @@ function Profile() {
 
                   <div className='about'>
                      <p className='profile_name'>{userData ? userData.fullname : 'Загрузка...'}</p>
-                     <p className='profile_status'>
+                     <p className='profile _status'>
                         {userData
                            ? (userData.role === 1 ? 'Продавец' : userData.role === 0 ? 'Покупатель' : 'Неизвестная роль')
                            : 'Загрузка...'}
@@ -246,8 +251,7 @@ function Profile() {
                         type='password'
                         required
                         value={confirmPassword}
-                        onChange={(e) => setConfirmPassword(e.target.value)}
-                     />
+                        onChange={(e) => setConfirmPassword(e.target.value)}/>
                   </div>
 
                   <button type='submit' className='auth_button'>Изменить</button>
