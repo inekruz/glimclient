@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import './Routes.css';
 import Example from '../images/primer.png';
+import Notification from '../components/Notification';
 
 function AddProduct() {
    const [productName, setProductName] = useState('Eda');
