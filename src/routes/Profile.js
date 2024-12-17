@@ -130,7 +130,7 @@ function Profile() {
       }
    }, [username]);
 
-   const getDeliveryCount = useCallback(async (login) => { 
+   const getDeliveryCount = useCallback(async () => { 
       try {
          const response = await fetch('https://api.glimshop.ru/getCountDelivery', {
             method: 'POST',
