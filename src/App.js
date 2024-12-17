@@ -57,7 +57,7 @@ function App() {
 
           const data = await response.json();
           if (data.length > 0) {
-            setAddress(data.address);
+            setAddress(data[0].address);
             console.log("add", data[0].address);
           } else {
             setAddress('Адрес не найден');
@@ -145,7 +145,7 @@ function App() {
 
         <div className='content'>
           <div className={`location_popup ${locationPopup ? 'active' : ''}`}>
-            <p>{address || 'Загрузка адреса...'}</p>
+            <p>{address}</p>
             <Link to='/profile' className='location_popup_link'>
               Изменить?
             </Link>
