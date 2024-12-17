@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './App.css';
 import { Link, Route, Routes, useLocation } from 'react-router-dom';
 
@@ -25,6 +25,7 @@ function App() {
   const [role, setRole] = useState(localStorage.getItem('role'));
   const location = useLocation();
   const [locationPopup, setLocationPopup] = useState(false);
+  const [address, setAddress] = useState('');
 
   const handleLogout = () => {
     localStorage.removeItem('token');
@@ -34,7 +35,40 @@ function App() {
     setUsername(null);
     setRole(null);
   };
+
   const roleText = role === '1' ? 'Продавец' : role === '0' ? 'Покупатель' : '';
+
+  useEffect(() => {
+    const fetchAddress = async () => {
+      if (username) {
+        try {
+          const response = await fetch('https://api.glimshop.ru/getAddress', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ login: username }),
+          });
+
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+
+          const data = await response.json();
+          if (data.length > 0) {
+            setAddress(data[0].Address);
+          } else {
+            setAddress('Адрес не найден');
+          }
+        } catch (error) {
+          console.error('Error fetching address:', error);
+          setAddress('Ошибка при получении адреса');
+        }
+      }
+    };
+
+    fetchAddress();
+  }, [username]);
 
   if (!token) {
     return <Auth setToken={setToken} setUsername={setUsername} setRole={setRole} />;
@@ -60,7 +94,7 @@ function App() {
               <Link to='/basket'>
                 <img src={BasketIcon} alt='basket' className='profile_button' />
               </Link>
-                <img src={ExitIcon} alt='exit' className='profile_button' onClick={handleLogout}  /> {/* Используем иконку вместо текста */}
+              <img src={ExitIcon} alt='exit' className='profile_button' onClick={handleLogout} />
             </div>
           </div>
         </header>
@@ -78,7 +112,7 @@ function App() {
 
             <Link to='/favorite' className={`nav_menu_list_item ${location.pathname === '/favorite' ? 'active' : ''}`}>
               <li className='nav_menu_list_item_container'>
-                <div className='menu_icon_container'>
+ <div className='menu_icon_container'>
                   <img alt='Иконка меню' src={MenuLike} className='menu_icon' />
                 </div>
                 <p>Отложенное</p>
@@ -109,8 +143,7 @@ function App() {
 
         <div className='content'>
           <div className={`location_popup ${locationPopup ? 'active' : ''}`}>
-            <p></p>
-            <p>ул. Фабричная, 9</p>
+            <p>{address || 'Загрузка адреса...'}</p>
             <Link to='/profile' className='location_popup_link'>
               Изменить?
             </Link>
