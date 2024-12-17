@@ -1,17 +1,51 @@
 import React, { useState } from 'react';
 import './Routes.css';
-
 import Example from '../images/primer.png';
 
 function AddProduct() {
    const [productName, setProductName] = useState('Eda');
    const [productCategory, setProductCategory] = useState('Еда');
    const [productPrice, setProductPrice] = useState(392);
+   const login = localStorage.getItem('username');
+   const [successMessage, setSuccessMessage] = useState('');
+   const [error, setError] = useState('');
+   const [showError, setShowError] = useState(false);
+   const [showSuccess, setShowSuccess] = useState(false);
+   
+   const handleAddProduct = async () => {
+      const confirmAdd = window.confirm('Вы уверены, что хотите добавить товар?');
+      if (confirmAdd) {
+         try {
+            const response = await fetch('https://api.glimshop.ru/addProduct', {
+               method: 'POST',
+               headers: {
+                  'Content-Type': 'application/json',
+               },
+               body: JSON.stringify({
+                  login,
+                  name: productName,
+                  category: productCategory,
+                  price: productPrice,
+               }),
+            });
+
+            if (!response.ok) {
+               setError('Ошибка при добавлении товара!');
+               throw new Error('Ошибка при добавлении товара');
+            }
+
+            setSuccessMessage('Товар добавлен успешно!');
+         } catch (error) {
+            setError('Ошибка:', error);
+         }
+      }
+   };
 
    return (
       <div className='route'>
          <h2 className='route_title'>Добавление товара</h2>
-
+         {showError && <Notification message={error} onClose={() => setShowError(false)} isSuccess={false} />}
+         {showSuccess && <Notification message={successMessage} onClose={() => setShowSuccess(false)} isSuccess={true} />}
          <div className='profile_container'>
             <div className='profile_container_header'></div>
 
@@ -71,10 +105,9 @@ function AddProduct() {
                            />
                         </div>
                      </div>
-
                   </div>
 
-                  <div className='edit_button'>
+                  <div className='edit_button' onClick={handleAddProduct}>
                      Добавить
                   </div>
                </div>
