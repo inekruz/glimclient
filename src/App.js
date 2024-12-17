@@ -57,7 +57,7 @@ function App() {
 
           const data = await response.json();
           if (data.length > 0) {
-            setAddress(data[0].Address);
+            setAddress(data.address);
           } else {
             setAddress('Адрес не найден');
           }
