@@ -10,7 +10,8 @@ function Main({ searchQuery }) {
    const login = localStorage.getItem('username');
    const [showError, setShowError] = useState(false);
    const [showSuccess, setShowSuccess] = useState(false);
-   
+   const [successMessage, setSuccessMessage] = useState('');
+   const [error, setError] = useState('');
    const setLike = async (id) => {
       try {
          const response = await fetch('https://api.glimshop.ru/setDeferred', {
@@ -51,7 +52,7 @@ function Main({ searchQuery }) {
          const data = await response.json();
          setProducts(data);
       } catch (error) {
-         console.error('Ошибка:', error);
+         setError('Ошибка:', error);
       }
    };
 
