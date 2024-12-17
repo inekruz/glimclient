@@ -15,6 +15,9 @@ function Profile() {
    const [confirmPassword, setConfirmPassword] = useState('');
    const [successMessage, setSuccessMessage] = useState('');
    const [error, setError] = useState('');
+   const [showError, setShowError] = useState(false);
+   const [showSuccess, setShowSuccess] = useState(false);
+   
    useEffect(() => {
       const fetchUserData = async () => {
          try {
