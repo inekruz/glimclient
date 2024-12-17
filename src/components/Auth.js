@@ -84,7 +84,7 @@ function Auth({ setToken }) {
           setToken(data.token);
           localStorage.setItem('token', data.token);
           localStorage.setItem('username', formData.username);
-          localStorage.setItem('role', formData.role);
+          localStorage.setItem('role', data.role);
           setSuccessMessage('Вход выполнен успешно!');
           setShowSuccess(true);
           setFormData({
