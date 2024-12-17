@@ -53,30 +53,31 @@ function Control({ username }) {
       }
    };
    
-   const getUser Products = useCallback(async () => {
+   const getUserProducts = useCallback(async () => {
       try {
-         const response = await fetch('https://api.glimshop.ru/getProductsUser ', {
+         const response = await fetch('https://api.glimshop.ru/getProductsUser', {
             method: 'POST',
             headers: {
                'Content-Type': 'application/json',
             },
             body: JSON.stringify({ login: username }),
          });
-
+   
          if (!response.ok) {
             throw new Error('Ошибка при получении товаров');
          }
-
+   
          const data = await response.json();
          setProducts(data);
       } catch (error) {
-         setError('Ошибка:', error);
+         setError(`Ошибка: ${error.message}`);
       }
    }, [username]);
+   
 
    useEffect(() => {
-      getUser Products();
-   }, [getUser Products, login]);
+      getUserProducts();
+   }, [getUserProducts, login]);
 
    const deleteProduct = async (productId) => {
       try {
