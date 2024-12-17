@@ -3,11 +3,11 @@ import './Routes.css';
 import Example from '../images/primer.png';
 
 function Basket() {
-   const [products, setProducts] = useState([]);
    const [loading, setLoading] = useState(true);
    const [error, setError] = useState(null);
    const login = localStorage.getItem('username');
-   const [status, setStatus] = useState("В обработке");
+   const [deferredItems, setDeferredItems] = useState([]);
+   const [totalSum, setTotalSum] = useState(0);
 
    const handleDelete = async (product_id) => {
       try {
@@ -75,7 +75,7 @@ function Basket() {
             }
 
             const data = await response.json();
-            setProducts(data);
+            setDeferredItems(data);
          } catch (error) {
             setError(error.message);
          } finally {
@@ -101,16 +101,16 @@ function Basket() {
          <h2 className='route_title'>Корзина</h2>
 
          <ul className='main_products_list'>
-            {products.map(product => (
-               <li key={product.id} className='fav_list_item'>
+            {deferredItems.map(item => (
+               <li key={item.id} className='fav_list_item'>
                   <div className='fav_list_item_container'>
                      <img className='main_products_image fav_products_image' alt='Изображение товара' src={Example} />
                      <div className='fav_list_item_desc'>
                         <div>
-                           <p className='fav_product_name white'>{product.product_name}</p>
-                           <p className='product_category orng'>{product.product_category}</p>
+                           <p className='fav_product_name white'>{item.product_name}</p>
+                           <p className='product_category orng'>{item.product_category}</p>
                         </div>
-                        <p className='price white'>{product.product_price} ₽</p>
+                        <p className='price white'>{item.product_price} ₽</p>
                      </div>
                      <span/>
                   </div>
