@@ -93,7 +93,7 @@ function App() {
               </li>
             </Link>
 
-            {role === 1 && (
+            {role == 1 && (
               <Link to='/addproduct' className={`nav_menu_list_item ${location.pathname === '/addproduct' ? 'active' : ''}`}>
                 <li className='nav_menu_list_item_container'>
                   <div className='menu_icon_container'>
