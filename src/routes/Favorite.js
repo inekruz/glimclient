@@ -33,11 +33,10 @@ function Favorite() {
             const data = await response.json();
             setDeferredItems(data);
 
-            // Вычисляем общую сумму
+            // Обновляем общую сумму, убираем умножение на count
             const total = data.reduce((sum, item) => {
-               const productPrice = item.product ? parseFloat(item.product.price) : 0; // Проверка на наличие продукта
-               const count = item.count;
-               return sum + (productPrice * count);
+               const productPrice = item.product_price ? parseFloat(item.product_price) : 0; // Используем product_price из item
+               return sum + productPrice; // Суммируем только цены
             }, 0);
             setTotalSum(total);
          } catch (error) {
@@ -57,20 +56,20 @@ function Favorite() {
 
          <ul className='main_products_list'>
             {deferredItems.map(item => (
-               <li key={item.product ? item.product.id : item.count} className='fav_list_item'>
+               <li key={item.id} className='fav_list_item'> {/* Используем item.id как ключ */}
                   <div className='fav_list_item_container'>
                      <img className='main_products_image fav_products_image' alt='Изображение товара' src={Example} />
                      <div className='fav_list_item_desc'>
                         <div>
-                           <p className='fav_product_name white'>{item.product ? item.product.name : 'Неизвестный товар'}</p>
-                           <p className='product_category orng'>{item.product ? item.product.category : 'Неизвестная категория'}</p>
+                           <p className='fav_product_name white'>{item.product_name || 'Неизвестный товар'}</p>
+                           <p className='product_category orng'>{item.product_category || 'Неизвестная категория'}</p>
                            <p className='count'>Количество: {item.count}</p> {/* Показываем количество */}
                         </div>
-                        <p className='price white'>{item.product ? `${item.product.price} ₽` : 'Цена недоступна'}</p>
+                        <p className='price white'>{item.product_price ? `${item.product_price} ₽` : 'Цена недоступна'}</p>
                      </div>
                      <span
-                        className={`like_button ${likedProducts[item.product ? item.product.id : ''] ? '' : 'liked'}`}
-                        onClick={() => setLike(item.product ? item.product.id : '')}
+                        className={`like_button ${likedProducts[item.id] ? '' : 'liked'}`}
+                        onClick={() => setLike(item.id)}
                         title='Отложить'
                      />
                   </div>

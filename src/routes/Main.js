@@ -12,27 +12,37 @@ function Main({ searchQuery }) {
    const [showSuccess, setShowSuccess] = useState(false);
    const [successMessage, setSuccessMessage] = useState('');
    const [error, setError] = useState('');
-   const setLike = async (id) => {
+   const setLike = async (product) => {
       try {
          const response = await fetch('https://api.glimshop.ru/setDeferred', {
             method: 'POST',
             headers: {
                'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ login, product_id: id }),
+            body: JSON.stringify({
+               login,
+               product_id: product.id,
+               product_name: product.name,
+               product_price: product.price,
+               product_category: product.category,
+               product_photo_id: product.photo_id,
+            }),
          });
-
+   
          if (!response.ok) {
             throw new Error('Ошибка при отправке запроса');
          }
-
+   
          setSuccessMessage("Успешно добавлено в отложенное!");
          setLikedProducts(prev => ({
             ...prev,
-            [id]: !prev[id],
+            [product.id]: !prev[product.id],
          }));
+         setShowSuccess(true);
       } catch (error) {
          console.error('Ошибка:', error);
+         setError('Ошибка при добавлении в отложенные');
+         setShowError(true);
       }
    };
 
@@ -101,7 +111,7 @@ function Main({ searchQuery }) {
                         <p className='price'>{product.price} ₽</p>
                         <span
                            className={`like_button${likedProducts[product.id] ? ' liked' : ''}`}
-                           onClick={() => setLike(product.id)}
+                           onClick={() => setLike(product)}
                            title='Отложить'
                         />
                      </div>
