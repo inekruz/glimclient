@@ -47,9 +47,13 @@ return (
            <img alt='profile_photo' src={DefaultProfileImage} className='profile_photo' />
  
            <div className='about'>
-             <p className='profile_name'>{userData ? userData.fullname : 'Загрузка...'}</p>
-             <p className='profile_status'>{userData ? userData.role : 'Загрузка...'}</p>
-           </div>
+               <p className='profile_name'>{userData ? userData.fullname : 'Загрузка...'}</p>
+               <p className='profile_status'>
+                  {userData 
+                     ? (userData.role === 1 ? 'Продавец' : userData.role === 0 ? 'Покупатель' : 'Неизвестная роль') 
+                     : 'Загрузка...'}
+               </p>
+            </div>
  
            <div className='profile_statistics'>
              <div className='profile_statistics_item'>
@@ -105,8 +109,12 @@ return (
                </div>
  
                <div className='profile_settings_column_param'>
-                 <p>Роль</p>
-                 <span>{userData ? userData.role : 'Загрузка...'}</span>
+                  <p>Роль</p>
+                  <span>
+                     {userData 
+                        ? (userData.role === 1 ? 'Продавец' : userData.role === 0 ? 'Покупатель' : 'Неизвестная роль') 
+                        : 'Загрузка...'}
+                  </span>
                </div>
              </div>
            </div>
