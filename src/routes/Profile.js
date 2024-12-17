@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import './Routes.css';
 import Notification from '../components/Notification';
 import DefaultProfileImage from '../icons/photo.svg';
@@ -109,7 +109,7 @@ function Profile() {
       }
    };
 
-   const getFavCount = async (login) => {
+   const getFavCount = useCallback(async () => { 
       try {
          const response = await fetch('https://api.glimshop.ru/getCountDeferred', {
             method: 'POST',
@@ -128,9 +128,9 @@ function Profile() {
       } catch (error) {
          setError('Ошибка:', error);
       }
-   };
+   }, [username]);
 
-   const getDeliveryCount = async (login) => {
+   const getDeliveryCount = useCallback(async (login) => { 
       try {
          const response = await fetch('https://api.glimshop.ru/getCountDelivery', {
             method: 'POST',
@@ -149,14 +149,12 @@ function Profile() {
       } catch (error) {
          setError('Ошибка:', error);
       }
-   };
+   }, [username]);
 
    useEffect(() => {
-      if (username) {
-          getFavCount(username);
-          getDeliveryCount(username);
-      }
-   }, []);
+      getFavCount();
+      getDeliveryCount();
+   }, [username, getFavCount, getDeliveryCount]);
 
    return (
       <div className='route'>
