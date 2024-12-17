@@ -46,7 +46,7 @@ function Profile() {
                   <img alt='profile_photo' src={DefaultProfileImage} className='profile_photo' />
 
                   <div className='about'>
-                     <p className='profile_name'>{userData ? userData.fullName : 'Загрузка...'}</p>
+                     <p className='profile_name'>{userData ? userData.fullname : 'Загрузка...'}</p>
                      <p className='profile_status'>{userData ? userData.role : 'Загрузка...'}</p>
                   </div>
 
@@ -83,12 +83,12 @@ function Profile() {
                      <div className='profile_settings_column'>
                         <div className='profile_settings_column_param'>
                            <p>ФИО</p>
-                           <span>{userData ? userData.fullName : 'Загрузка...'}</span>
+                           <span>{userData ? userData.fullname : 'Загрузка...'}</span>
                         </div>
 
                         <div className='profile_settings_column_param'>
                            <p>Логин</p>
-                           <span>{userData ? userData.username : 'Загрузка...'}</span>
+                           <span>{userData ? userData.login : 'Загрузка...'}</span>
                         </div>
 
                         <div className='profile_settings_column_param'>
@@ -100,7 +100,7 @@ function Profile() {
                      <div className='profile_settings_column'>
                         <div className='profile_settings_column_param'>
                            <p>Номер телефона</p>
-                           <span>{userData ? userData.phone : 'Загрузка...'}</span>
+                           <span>{userData ? userData.phone_number : 'Загрузка...'}</span>
                         </div>
 
  <div className='profile_settings_column_param'>
@@ -131,7 +131,7 @@ function Profile() {
                        placeholder=''
                        type='text'
                        required
-                       defaultValue={userData ? userData.fullName : ''}
+                       defaultValue={userData ? userData.fullname : ''}
                      />
 
                      <legend>Домашний адрес</legend>
@@ -148,7 +148,7 @@ function Profile() {
                        type='number'
                        required
                        pattern="\d*"
-                       defaultValue={userData ? userData.phone : ''}
+                       defaultValue={userData ? userData.phone_number : ''}
                      />
 
                      <legend>Пароль</legend>
