@@ -162,7 +162,7 @@ function App() {
             <Route path='/basket' element={<Basket />} />
             <Route path='/favorite' element={<Favorite />} />
             <Route path='/delivery' element={<Delivery />} />
-            <Route path='/control' element={<Control />} />
+            <Route path='/control' element={<Control username={username} />} />
           </Routes>
         </div>
       </div>

@@ -1,9 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './Routes.css';
+
 import Example from '../images/primer.png';
+import CrossImage from '../icons/cross.svg';
+
 import Notification from '../components/Notification';
 
-function Control() {
+function Control({ username }) {
    const [productName, setProductName] = useState('Eda');
    const [productCategory, setProductCategory] = useState('Еда');
    const [productPrice, setProductPrice] = useState(392);
@@ -13,6 +16,9 @@ function Control() {
    const [showError, setShowError] = useState(false);
    const [showSuccess, setShowSuccess] = useState(false);
    const [activeRoute, setActiveRoute] = useState('Добавить');
+   const [products, setProducts] = useState([]);
+   const [editPopup, setEditPopup] = useState(false);
+   const [selectedProduct, setSelectedProduct] = useState('');
 
    const changeRoute = (routeName) => {
       setActiveRoute(routeName);
@@ -47,6 +53,96 @@ function Control() {
       }
    };
    
+   const getUserProducts = async () => {
+      try {
+         const response = await fetch('https://api.glimshop.ru/getProductsUser', {
+            method: 'POST',
+            headers: {
+               'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ login: username }),
+         });
+
+         if (!response.ok) {
+            throw new Error('Ошибка при получении товаров');
+         }
+
+         const data = await response.json();
+         setProducts(data);
+      } catch (error) {
+         setError('Ошибка:', error);
+      }
+   };
+
+   useEffect(() => {
+      getUserProducts(login);
+   }, []);
+
+
+   const deleteProduct = async (productId) => {
+      try {
+         const response = await fetch('https://api.glimshop.ru/delProductUser', {
+            method: 'POST',
+            headers: {
+               'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ login: username, id: productId }),
+         });
+
+         if (!response.ok) {
+            throw new Error('Ошибка при получении товаров');
+         }
+
+         const data = await response.json();
+         setProducts(data);
+      } catch (error) {
+         setError('Ошибка:', error);
+      }
+   };
+
+   const updateProduct = async (productId, productName, productCategory, productPrice) => {
+      try {
+         const response = await fetch('https://api.glimshop.ru/updProductsUser', {
+            method: 'POST',
+            headers: {
+               'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(
+               {
+                  login: username,
+                  id: productId,
+                  name: productName,
+                  category: productCategory,
+                  price: productPrice
+               }
+            ),
+         });
+
+         if (!response.ok) {
+            throw new Error('Ошибка при получении товаров');
+         }
+
+         const data = await response.json();
+         setProducts(data);
+         window.location.reload();
+      } catch (error) {
+         setError('Ошибка:', error);
+      }
+   };
+
+   const handleSubmit = async (event) => {
+      event.preventDefault();
+      const productName = event.target[0].value;
+      const productCategory = event.target[1].value;
+      const productPrice = event.target[2].value;
+
+      await updateProduct(selectedProduct.id, productName, productCategory, productPrice);
+   };
+
+   const handleEditClick = (product) => {
+      setSelectedProduct(product);
+      setEditPopup(true);
+   };
 
    return (
       <div className='route'>
@@ -141,12 +237,69 @@ function Control() {
          )}
 
          {activeRoute === 'Список' && (
-         <div className='delete_product'>
-            список товаров сюда засунь 
-            для кнопки изменить добавь класс "control_change_product"
-            а для кнопки удалить добавь класс "control_delete_product"
-         </div>
+            <ul className='main_products_list'>
+               {Array.isArray(products) && products.length > 0 ? (
+                  products.map(product => (
+                     <li key={product.id} className='main_products_list_item'>
+                        <img className='main_products_image' alt='Изображение товара' src={Example} />
+                        <div className='product_info'>
+                           <div className='product_info_container'>
+                              <p className='price'>{product.price} ₽</p>
+                           </div>
+                           <p className='product_name'>{product.name} <b className='product_category orng'>/ {product.category}</b></p>
+                        </div>
+                  
+                        <div className='buy_button_container'>
+                           <button className='control_change_product' onClick={() => handleEditClick(product)}>Изменить</button>
+                           <button className='control_delete_product' onClick={() => deleteProduct(product.id)}>Удалить</button>
+                        </div>
+                     </li>
+                  ))
+               ) : (
+                  <li>Нет товаров</li>
+               )}
+            </ul>
          )}
+
+         <div className={`edit_acc ${editPopup ? 'active' : ''}`} onClick={() => setEditPopup(false)}>
+            <div className='edit_acc_container' onClick={e => e.stopPropagation()}>
+               <div className='edit_acc_header'>
+                  <img alt='cross' src={CrossImage} onClick={() => setEditPopup(false)} />
+               </div>
+               <form onSubmit={handleSubmit}>
+                  <h2 className='form_title edit_profile_title'>Изменение товара</h2>
+                  <div className='form_container'>
+
+                     <legend>Название</legend>
+                     <input
+                        placeholder=''
+                        type='text'
+                        required
+                        defaultValue={selectedProduct.name}
+                     />
+
+                     <legend>Категория</legend>
+                     <input
+                        placeholder=''
+                        type='text'
+                        required
+                        defaultValue={selectedProduct.category}
+                     />
+
+                     <legend>Цена</legend>
+                     <input
+                        placeholder=''
+                        type='number'
+                        required
+                        pattern="\d*"
+                        defaultValue={selectedProduct.price}
+                     />
+                  </div>
+
+                  <button type='submit' className='auth_button'>Изменить</button>
+               </form>
+            </div>
+         </div>
 
       </div>
    );

@@ -17,6 +17,8 @@ function Profile() {
    const [error, setError] = useState('');
    const [showError, setShowError] = useState(false);
    const [showSuccess, setShowSuccess] = useState(false);
+   const [favCount, setFavCount] = useState(0);
+   const [deliveryCount, setDeliveryCount] = useState(0);
    
    useEffect(() => {
       const fetchUserData = async () => {
@@ -107,6 +109,55 @@ function Profile() {
       }
    };
 
+   const getFavCount = async (login) => {
+      try {
+         const response = await fetch('https://api.glimshop.ru/getCountDeferred', {
+            method: 'POST',
+            headers: {
+               'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ login: username }),
+         });
+   
+         if (!response.ok) {
+            throw new Error('Ошибка при получении товаров');
+         }
+   
+         const data = await response.json();
+         setFavCount(data.count);
+      } catch (error) {
+         setError('Ошибка:', error);
+      }
+   };
+
+   const getDeliveryCount = async (login) => {
+      try {
+         const response = await fetch('https://api.glimshop.ru/getCountDelivery', {
+            method: 'POST',
+            headers: {
+               'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ login: username }),
+         });
+   
+         if (!response.ok) {
+            throw new Error('Ошибка при получении товаров');
+         }
+   
+         const data = await response.json();
+         setDeliveryCount(data.count);
+      } catch (error) {
+         setError('Ошибка:', error);
+      }
+   };
+
+   useEffect(() => {
+      if (username) {
+          getFavCount(username);
+          getDeliveryCount(username);
+      }
+   }, []);
+
    return (
       <div className='route'>
          <h2 className='route_title'>Профиль</h2>
@@ -130,23 +181,16 @@ function Profile() {
 
                   <div className='profile_statistics'>
                      <div className='profile_statistics_item'>
-                        <p className='profile_stat_name'>Товаров в избранном: </p>
+                        <p className='profile_stat_name'>Товаров в избранном:</p>
                         <div>
-                           <p className='profile_status'>{userData ? userData.favoriteItemsCount : ' Загрузка...'}</p>
+                           <p className='profile_status'>{favCount !== null ? favCount : 'Загрузка...'}</p>
                         </div>
                      </div>
 
                      <div className='profile_statistics_item'>
-                        <p className='profile_stat_name'>Товаров в пути: </p>
+                        <p className='profile_stat_name'>Купленно товаров: </p>
                         <div>
-                           <p className='profile_status'>{userData ? userData.itemsInTransitCount : 'Загрузка...'}</p>
-                        </div>
-                     </div>
-
-                     <div className='profile_statistics_item'>
-                        <p className='profile_stat_name'>Ещё что-то: </p>
-                        <div>
-                           <p className='profile_status'>{userData ? userData.otherCount : 'Загрузка...'}</p>
+                           <p className='profile_status'>{deliveryCount !== null ? deliveryCount : 'Загрузка...'}</p>
                         </div>
                      </div>
                   </div>
