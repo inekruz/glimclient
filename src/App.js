@@ -38,6 +38,7 @@ function App() {
   if (!token) {
     return <Auth setToken={setToken} setUsername={setUsername} setRole={setRole} />;
   } else {
+    console.log("Получен роль: ", role);
     return (
       <div className="App">
         <header>
