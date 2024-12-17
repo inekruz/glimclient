@@ -35,7 +35,7 @@ function App() {
     setRole(null);
   };
 
-  if (token) {
+  if (!token) {
     return <Auth setToken={setToken} setUsername={setUsername} setRole={setRole} />;
   } else {
     return (
