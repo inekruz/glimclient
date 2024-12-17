@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './Routes.css';
 import Example from '../images/primer.png';
 
-function Main() {
+function Main({ searchQuery }) { // Получение поискового запроса через пропс
    const [products, setProducts] = useState([]);
    const [likedProducts, setLikedProducts] = useState({});
    const [sortOrder, setSortOrder] = useState({ key: '', direction: 'asc' });
@@ -53,6 +53,11 @@ function Main() {
       setProducts(sortedProducts);
    };
 
+   // Фильтрация товаров на основе поискового запроса
+   const filteredProducts = products.filter(product => 
+      product.name.toLowerCase().includes(searchQuery.toLowerCase())
+   );
+
    return (
       <div className='route main_route'>
          <h2 className='route_title'>Товары</h2>
@@ -65,7 +70,7 @@ function Main() {
          </div>
 
          <ul className='main_products_list'>
-            {products.map(product => (
+            {filteredProducts.map(product => (
                <li key={product.id} className='main_products_list_item'>
                   <img className='main_products_image' alt='Изображение товара' src={Example} /> {/* Замените на product.photo_id, если у вас есть URL изображения */}
 

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
 import { Link, Route, Routes, useLocation } from 'react-router-dom';
-
 import Auth from './components/Auth';
 import Main from './routes/Main';
 import Basket from './routes/Basket';
@@ -26,6 +25,7 @@ function App() {
   const location = useLocation();
   const [locationPopup, setLocationPopup] = useState(false);
   const [address, setAddress] = useState('');
+  const [searchQuery, setSearchQuery] = useState(''); // Новое состояние для поискового запроса
 
   const handleLogout = () => {
     localStorage.removeItem('token');
@@ -42,7 +42,6 @@ function App() {
     const fetchAddress = async () => {
       if (username) {
         try {
-          console.log("adrrsss:", username);
           const response = await fetch('https://api.glimshop.ru/getAddress', {
             method: 'POST',
             headers: {
@@ -58,7 +57,6 @@ function App() {
           const data = await response.json();
           if (data.length > 0) {
             setAddress(data[0].address);
-            console.log("add", data[0].address);
           } else {
             setAddress('Адрес не найден');
           }
@@ -75,7 +73,6 @@ function App() {
   if (!token) {
     return <Auth setToken={setToken} setUsername={setUsername} setRole={setRole} />;
   } else {
-    console.log("Получен роль: ", roleText);
     return (
       <div className="App">
         <header>
@@ -86,7 +83,11 @@ function App() {
               </Link>
             </div>
 
-            <input placeholder='Поиск' />
+            <input 
+              placeholder='Поиск' 
+              value={searchQuery} 
+              onChange={(e) => setSearchQuery(e.target.value)} // Обработчик изменения
+            />
 
             <div>
               <Link to='/profile'>
@@ -101,48 +102,6 @@ function App() {
           </div>
         </header>
 
-        <div className='nav_menu'>
-          <ul className='nav_menu_list'>
-            <Link to='/' className={`nav_menu_list_item ${location.pathname === '/' ? 'active' : ''}`}>
-              <li className='nav_menu_list_item_container'>
-                <div className='menu_icon_container'>
-                  <img alt='Иконка меню' src={MenuMain} className='menu_icon' />
-                </div>
-                <p>Главная</p>
-              </li>
-            </Link>
-
-            <Link to='/favorite' className={`nav_menu_list_item ${location.pathname === '/favorite' ? 'active' : ''}`}>
-              <li className='nav_menu_list_item_container'>
- <div className='menu_icon_container'>
-                  <img alt='Иконка меню' src={MenuLike} className='menu_icon' />
-                </div>
-                <p>Отложенное</p>
-              </li>
-            </Link>
-
-            <Link to='/delivery' className={`nav_menu_list_item ${location.pathname === '/delivery' ? 'active' : ''}`}>
-              <li className='nav_menu_list_item_container'>
-                <div className='menu_icon_container'>
-                  <img alt='Иконка меню' src={MenuDelivery} className='menu_icon' />
-                </div>
-                <p>Доставки</p>
-              </li>
-            </Link>
-
-            {roleText === 'Продавец' && (
-              <Link to='/addproduct' className={`nav_menu_list_item ${location.pathname === '/addproduct' ? 'active' : ''}`}>
-                <li className='nav_menu_list_item_container'>
-                  <div className='menu_icon_container'>
-                    <img alt='Иконка меню' src={MenuAdd} className='menu_icon' />
-                  </div>
-                  <p>Добавить товар</p>
-                </li>
-              </Link>
-            )}
-          </ul>
-        </div>
-
         <div className='content'>
           <div className={`location_popup ${locationPopup ? 'active' : ''}`}>
             <p>{address}</p>
@@ -152,7 +111,7 @@ function App() {
           </div>
           <Routes>
             <Route path='/profile' element={<Profile username={username} />} />
-            <Route path='/' element={<Main />} />
+            <Route path='/' element={<Main searchQuery={searchQuery} />} /> 
             <Route path='/basket' element={<Basket />} />
             <Route path='/favorite' element={<Favorite />} />
             <Route path='/delivery' element={<Delivery />} />
