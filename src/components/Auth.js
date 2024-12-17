@@ -11,7 +11,7 @@ function Auth({ setToken }) {
       phone: '',
       password: '',
       confirmPassword: '',
-      role: 'Покупатель',
+      role: '',
    });
    const [error, setError] = useState('');
    const [showError, setShowError] = useState(false);
@@ -142,7 +142,7 @@ function Auth({ setToken }) {
             phone: '',
             password: '',
             confirmPassword: '',
-            role: 'Покупатель',
+            role: '',
           });
           setShowError(false);
           window.location.reload();
