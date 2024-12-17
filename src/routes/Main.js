@@ -46,6 +46,34 @@ function Main({ searchQuery }) {
       }
    };
 
+   const handleAddToBasket = async (product) => {
+      try {
+         const response = await fetch('https://api.glimshop.ru/addBasket', {
+            method: 'POST',
+            headers: {
+               'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+               login,
+               product_id: product.id,
+               product_name: product.name,
+               product_price: product.price,
+               product_category: product.category,
+               product_photo_id: product.photo_id,
+            }),
+         });
+
+         if (!response.ok) {
+            throw new Error('Ошибка при добавлении товара в корзину');
+         }
+
+         const data = await response.json();
+         console.log(data.message);
+      } catch (error) {
+         console.error('Ошибка:', error);
+      }
+   };
+
    const fetchProducts = async () => {
       try {
          const response = await fetch('https://api.glimshop.ru/getProducts', {
@@ -119,7 +147,7 @@ function Main({ searchQuery }) {
                   </div>
 
                   <div className='buy_button_container'>
-                     <button className='buy_button'>Добавить в корзину</button>
+                     <button className='buy_button' onClick={() => handleAddToBasket(product)}>Добавить в корзину</button>
                   </div>
                </li>
             ))}

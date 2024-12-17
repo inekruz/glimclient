@@ -276,3 +276,6 @@ header {
   color: #8C9293;
   overflow: hidden;
 }
+.fix_position {
+  opacity: 0;
+}

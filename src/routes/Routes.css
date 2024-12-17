@@ -437,3 +437,44 @@
    border-radius: 7px;
    border: 2px solid #8C9293;
 }
+
+.header_nav {
+   display: flex;
+   justify-content: space-between;
+   align-items: center;
+   width: 400px;
+   margin: 10px auto;
+   user-select: none;
+   background-color: #FFF;
+   padding: 20px 40px;
+   border-radius: 7px;
+   transform: translateY(-20px);
+}
+.header_nav_item {
+   cursor: pointer;
+   color: #000;
+   padding-bottom: 5px;
+}
+.header_nav_item.active {
+   border-bottom: 3px solid #F2890C;
+}
+
+.control_change_product {
+   background-color: blue;
+   margin-right: 10px;
+   border: none;
+   border-radius: 7px;
+   padding: 5px 10px;
+   cursor: pointer;
+   color: #fff;
+}
+
+.control_delete_product {
+   background-color: red;
+   margin-right: 10px;
+   border: none;
+   border-radius: 7px;
+   padding: 5px 10px;
+   cursor: pointer;
+   color: #fff;
+}

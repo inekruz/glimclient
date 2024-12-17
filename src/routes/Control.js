@@ -3,7 +3,7 @@ import './Routes.css';
 import Example from '../images/primer.png';
 import Notification from '../components/Notification';
 
-function AddProduct() {
+function Control() {
    const [productName, setProductName] = useState('Eda');
    const [productCategory, setProductCategory] = useState('Еда');
    const [productPrice, setProductPrice] = useState(392);
@@ -12,6 +12,11 @@ function AddProduct() {
    const [error, setError] = useState('');
    const [showError, setShowError] = useState(false);
    const [showSuccess, setShowSuccess] = useState(false);
+   const [activeRoute, setActiveRoute] = useState('Добавить');
+
+   const changeRoute = (routeName) => {
+      setActiveRoute(routeName);
+   };
    
    const handleAddProduct = async () => {
       const confirmAdd = window.confirm('Вы уверены, что хотите добавить товар?');
@@ -41,12 +46,31 @@ function AddProduct() {
          }
       }
    };
+   
 
    return (
       <div className='route'>
-         <h2 className='route_title'>Добавление товара</h2>
+         <h2 className='route_title'>Управление</h2>
+         <div>
+            <div className='header_nav'>
+               <p 
+                 className={`header_nav_item ${activeRoute === 'Добавить' ? 'active' : ''}`} 
+                 onClick={() => changeRoute('Добавить')}
+               >
+                 Добавить
+               </p>
+               <p 
+                 className={`header_nav_item ${activeRoute === 'Список' ? 'active' : ''}`} 
+                 onClick={() => changeRoute('Список')}
+               >
+                 Список товаров
+               </p>
+            </div>
+         </div>
          {showError && <Notification message={error} onClose={() => setShowError(false)} isSuccess={false} />}
          {showSuccess && <Notification message={successMessage} onClose={() => setShowSuccess(false)} isSuccess={true} />}
+         
+         {activeRoute === 'Добавить' && (
          <div className='profile_container'>
             <div className='profile_container_header'></div>
 
@@ -114,8 +138,18 @@ function AddProduct() {
                </div>
             </div>
          </div>
+         )}
+
+         {activeRoute === 'Список' && (
+         <div className='delete_product'>
+            список товаров сюда засунь 
+            для кнопки изменить добавь класс "control_change_product"
+            а для кнопки удалить добавь класс "control_delete_product"
+         </div>
+         )}
+
       </div>
    );
 }
 
-export default AddProduct;
+export default Control;

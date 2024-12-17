@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import './Routes.css';
 import Example from '../images/primer.png';
+import { Link } from 'react-router-dom';
+
+import BasketIcon from '../icons/basket.svg';
 
 function Basket() {
    const [loading, setLoading] = useState(true);
@@ -94,6 +97,22 @@ function Basket() {
 
    if (error) {
       return <p>Ошибка: {error}</p>;
+   }
+
+   if (!deferredItems.length)
+   {
+      return (
+         <div className='route no_delivery_route'>
+            <h2 className='route_title'>Корзина</h2>
+            <div className='no_delivery'>
+               <div>
+                 <img src={BasketIcon} alt='Машина' />
+                 <h2>Здесь ничего нет</h2>
+                 <Link to='/' className='buy_button new_link'>Посмотреть товары</Link>
+               </div>
+            </div>
+         </div>
+      );
    }
 
    return (

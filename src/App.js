@@ -8,7 +8,7 @@ import Basket from './routes/Basket';
 import Profile from './routes/Profile';
 import Favorite from './routes/Favorite';
 import Delivery from './routes/Delivery';
-import AddProduct from './routes/AddProduct';
+import Control from './routes/Control';
 
 import ProfileIcon from './icons/profile.svg';
 import BasketIcon from './icons/basket.svg';
@@ -119,7 +119,7 @@ function App() {
 
             <Link to='/favorite' className={`nav_menu_list_item ${location.pathname === '/favorite' ? 'active' : ''}`}>
               <li className='nav_menu_list_item_container'>
- <div className='menu_icon_container'>
+                <div className='menu_icon_container'>
                   <img alt='Иконка меню' src={MenuLike} className='menu_icon' />
                 </div>
                 <p>Отложенное</p>
@@ -136,12 +136,12 @@ function App() {
             </Link>
 
             {roleText === 'Продавец' && (
-              <Link to='/addproduct' className={`nav_menu_list_item ${location.pathname === '/addproduct' ? 'active' : ''}`}>
+              <Link to='/control' className={`nav_menu_list_item ${location.pathname === '/control' ? 'active' : ''}`}>
                 <li className='nav_menu_list_item_container'>
                   <div className='menu_icon_container'>
                     <img alt='Иконка меню' src={MenuAdd} className='menu_icon' />
                   </div>
-                  <p>Добавить товар</p>
+                  <p>Управление</p>
                 </li>
               </Link>
             )}
@@ -150,6 +150,7 @@ function App() {
 
         <div className='content'>
           <div className={`location_popup ${locationPopup ? 'active' : ''}`}>
+            <p className='fix_position' />
             <p>{address}</p>
             <Link to='/profile' className='location_popup_link'>
               Изменить?
@@ -161,7 +162,7 @@ function App() {
             <Route path='/basket' element={<Basket />} />
             <Route path='/favorite' element={<Favorite />} />
             <Route path='/delivery' element={<Delivery />} />
-            <Route path='/addproduct' element={<AddProduct />} />
+            <Route path='/control' element={<Control />} />
           </Routes>
         </div>
       </div>
