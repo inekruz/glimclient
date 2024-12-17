@@ -38,6 +38,34 @@ function Favorite() {
       }
    };
 
+   const handleAddToBasket = async (item) => {
+      try {
+         const response = await fetch('https://api.glimshop.ru/addBasket', {
+            method: 'POST',
+            headers: {
+               'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+               login,
+               product_id: item.product_id,
+               product_name: item.product_name,
+               product_price: item.product_price,
+               product_category: item.product_category,
+               product_photo_id: item.product_photo_id,
+            }),
+         });
+
+         if (!response.ok) {
+            throw new Error('Ошибка при добавлении товара в корзину');
+         }
+
+         const data = await response.json();
+         console.log(data.message);
+      } catch (error) {
+         console.error('Ошибка:', error);
+      }
+   };
+
    useEffect(() => {
       const fetchDeferredItems = async () => {
          try {
@@ -79,14 +107,14 @@ function Favorite() {
 
          <ul className='main_products_list'>
             {deferredItems.map(item => (
-               <li key={item.id} className='fav_list_item'> {/* Используем item.id как ключ */}
+               <li key={item.id} className='fav_list_item'>
                   <div className='fav_list_item_container'>
                      <img className='main_products_image fav_products_image' alt='Изображение товара' src={Example} />
                      <div className='fav_list_item_desc'>
                         <div>
                            <p className='fav_product_name white'>{item.product_name || 'Неизвестный товар'}</p>
                            <p className='product_category orng'>{item.product_category || 'Неизвестная категория'}</p>
-                           <p className='count'>Количество: {item.count}</p> {/* Показываем количество */}
+                           <p className='count'>Количество: {item.count}</p>
                         </div>
                         <p className='price white'>{item.product_price ? `${item.product_price} ₽` : 'Цена недоступна'}</p>
                      </div>
@@ -97,8 +125,8 @@ function Favorite() {
                      />
                   </div>
                   <div className='fav_list_item_button_container'>
-                     <button className='buy_button'>Добавить в корзину</button>
-                     <button className='delete_button' onClick={() => handleDelete(item.product_id)}>Удалить</button>
+                     <button className='buy_button' onClick={() => handleAddToBasket(item)}>Добавить в корзину</button>
+                     <button className='buy_button delete_button' onClick={() => handleDelete(item.product_id)}>Удалить</button>
                   </div>
                </li>
             ))}
