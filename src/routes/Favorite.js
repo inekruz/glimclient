@@ -33,10 +33,10 @@ function Favorite() {
             const data = await response.json();
             setDeferredItems(data);
 
-            // Обновляем общую сумму, убираем умножение на count
             const total = data.reduce((sum, item) => {
-               const productPrice = item.product_price ? parseFloat(item.product_price) : 0; // Используем product_price из item
-               return sum + productPrice; // Суммируем только цены
+               const productPrice = item.product_price ? parseFloat(item.product_price) : 0;
+               const count = item.count ? parseInt(item.count, 10) : 0;
+               return sum + (productPrice * count);
             }, 0);
             setTotalSum(total);
          } catch (error) {
