@@ -15,6 +15,29 @@ function Favorite() {
       }));
    };
 
+   const handleDelete = async (product_id) => {
+      try {
+         const response = await fetch('https://api.glimshop.ru/delDeferred', {
+            method: 'DELETE',
+            headers: {
+               'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ login, product_id }),
+         });
+
+         if (!response.ok) {
+            throw new Error('Ошибка при удалении товара');
+         }
+
+         setDeferredItems(prevItems => prevItems.filter(item => item.product_id !== product_id));
+
+         const updatedTotal = totalSum - (deferredItems.find(item => item.product_id === product_id)?.product_price || 0);
+         setTotalSum(updatedTotal);
+      } catch (error) {
+         console.error('Ошибка:', error);
+      }
+   };
+
    useEffect(() => {
       const fetchDeferredItems = async () => {
          try {
@@ -75,6 +98,7 @@ function Favorite() {
                   </div>
                   <div className='fav_list_item_button_container'>
                      <button className='buy_button'>Добавить в корзину</button>
+                     <button className='delete_button' onClick={() => handleDelete(item.product_id)}>Удалить</button>
                   </div>
                </li>
             ))}
