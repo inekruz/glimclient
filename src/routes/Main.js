@@ -1,17 +1,38 @@
 import React, { useState, useEffect } from 'react';
 import './Routes.css';
 import Example from '../images/primer.png';
+import Notification from '../components/Notification';
 
-function Main({ searchQuery }) { // Получение поискового запроса через пропс
+function Main({ searchQuery }) {
    const [products, setProducts] = useState([]);
    const [likedProducts, setLikedProducts] = useState({});
    const [sortOrder, setSortOrder] = useState({ key: '', direction: 'asc' });
+   const login = localStorage.getItem('username');
+   const [showError, setShowError] = useState(false);
+   const [showSuccess, setShowSuccess] = useState(false);
+   
+   const setLike = async (id) => {
+      try {
+         const response = await fetch('https://api.glimshop.ru/setDeferred', {
+            method: 'POST',
+            headers: {
+               'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ login, product_id: id }),
+         });
 
-   const setLike = (id) => {
-      setLikedProducts(prev => ({
-         ...prev,
-         [id]: !prev[id],
-      }));
+         if (!response.ok) {
+            throw new Error('Ошибка при отправке запроса');
+         }
+
+         setSuccessMessage("Успешно добавлено в отложенное!");
+         setLikedProducts(prev => ({
+            ...prev,
+            [id]: !prev[id],
+         }));
+      } catch (error) {
+         console.error('Ошибка:', error);
+      }
    };
 
    const fetchProducts = async () => {
@@ -53,7 +74,6 @@ function Main({ searchQuery }) { // Получение поискового за
       setProducts(sortedProducts);
    };
 
-   // Фильтрация товаров на основе поискового запроса
    const filteredProducts = products.filter(product => 
       product.name.toLowerCase().includes(searchQuery.toLowerCase())
    );
@@ -61,7 +81,8 @@ function Main({ searchQuery }) { // Получение поискового за
    return (
       <div className='route main_route'>
          <h2 className='route_title'>Товары</h2>
-
+         {showError && <Notification message={error} onClose={() => setShowError(false)} isSuccess={false} />}
+         {showSuccess && <Notification message={successMessage} onClose={() => setShowSuccess(false)} isSuccess={true} />}
          <div className='main_header'>
             <p>Сортировать по:</p>
             <p className='main_header_item' onClick={() => sortProducts('name')}>Названию</p>
@@ -78,7 +99,7 @@ function Main({ searchQuery }) { // Получение поискового за
                      <div className='product_info_container'>
                         <p className='price'>{product.price} ₽</p>
                         <span
-                           className={`like_button ${likedProducts[product.id] ? 'liked' : ''}`}
+                           className={`like_button${likedProducts[product.id] ? ' liked' : ''}`}
                            onClick={() => setLike(product.id)}
                            title='Отложить'
                         />
