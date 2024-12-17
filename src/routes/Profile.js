@@ -7,20 +7,20 @@ import CrossImage from '../icons/cross.svg';
 function Profile() {
    const [popup, setPopup] = useState(false);
    const [userData, setUserData] = useState(null);
-   const username = useState(localStorage.getItem('username'));
+   const username = localStorage.getItem('username');
 
    useEffect(() => {
       const fetchUserData = async () => {
          try {
-            const response = await fetch('https://api.glimshop.ru/getUser', {
+            const response = await fetch('https://api.glimshop.ru/getUser ', {
                method: 'POST',
                headers: {
-                 'Content-Type': 'application/json',
+                  'Content-Type': 'application/json',
                },
                body: JSON.stringify({
-                 login: username
+                  login: username
                }),
-             });
+            });
             if (!response.ok) {
                throw new Error('Network response was not ok');
             }
@@ -103,21 +103,21 @@ function Profile() {
                            <span>{userData ? userData.phone : 'Загрузка...'}</span>
                         </div>
 
-                        <div className='profile_settings_column_param'>
+ <div className='profile_settings_column_param'>
                            <p>Роль</p>
                            <span>{userData ? userData.role : 'Загрузка...'}</span>
                         </div>
                      </div>
                   </div>
 
-                  <div className='edit_button' onClick={setPopup}>
+                  <div className='edit_button' onClick={() => setPopup(true)}>
                      Изменить
                   </div>
                </div>
             </div>
          </div>
 
-         <div className={`edit_acc ${popup ? 'active' : ''}`} onClick={() => setPopup(false )}>
+         <div className={`edit_acc ${popup ? 'active' : ''}`} onClick={() => setPopup(false)}>
             <div className='edit_acc_container' onClick={e => e.stopPropagation()}>
                <div className='edit_acc_header'>
                   <img alt='cross' src={CrossImage} onClick={() => setPopup(false)} />
