@@ -5,6 +5,7 @@ import Example from '../images/primer.png';
 function Main() {
    const [products, setProducts] = useState([]);
    const [likedProducts, setLikedProducts] = useState({});
+   const [sortOrder, setSortOrder] = useState({ key: '', direction: 'asc' });
 
    const setLike = (id) => {
       setLikedProducts(prev => ({
@@ -37,6 +38,20 @@ function Main() {
       fetchProducts();
    }, []);
 
+   const sortProducts = (key) => {
+      const direction = sortOrder.key === key && sortOrder.direction === 'asc' ? 'desc' : 'asc';
+      setSortOrder({ key, direction });
+
+      const sortedProducts = [...products].sort((a, b) => {
+         if (direction === 'asc') {
+            return a[key] > b[key] ? 1 : -1;
+         } else {
+            return a[key] < b[key] ? 1 : -1;
+         }
+      });
+
+      setProducts(sortedProducts);
+   };
 
    return (
       <div className='route main_route'>
@@ -44,9 +59,9 @@ function Main() {
 
          <div className='main_header'>
             <p>Сортировать по:</p>
-            <p className='main_header_item'>Названию</p>    {/* onClick сюда  */}
-            <p className='main_header_item'>Цене</p>        {/* onClick сюда  */}
-            <p className='main_header_item'>Категории</p>   {/* onClick сюда  */}
+            <p className='main_header_item' onClick={() => sortProducts('name')}>Названию</p>
+            <p className='main_header_item' onClick={() => sortProducts('price')}>Цене</p>
+            <p className='main_header_item' onClick={() => sortProducts('category')}>Категории</p>
          </div>
 
          <ul className='main_products_list'>
