@@ -58,7 +58,7 @@ function App() {
           const data = await response.json();
           if (data.length > 0) {
             setAddress(data.address);
-            console.log("add", data.address);
+            console.log("add", data[0].address);
           } else {
             setAddress('Адрес не найден');
           }
