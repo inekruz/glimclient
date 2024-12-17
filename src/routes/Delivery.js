@@ -10,7 +10,7 @@ function Delivery() {
   const [delivery, setDelivery] = useState([]);
   const [error, setError] = useState(null);
   const login = localStorage.getItem('username');
-  
+
   useEffect(() => {
     const getDelivery = async () => {
       try {
@@ -78,10 +78,10 @@ function Delivery() {
               <img className='main_products_image fav_products_image' alt='Изображение товара' src={Example} />
               <div className='fav_list_item_desc'>
                 <div>
-                  <p className='fav_product_name white'>{product.name}</p>
-                  <p className='product_category orng'>{product.category}</p>
+                  <p className='fav_product_name white'>{product.product_name}</p>
+                  <p className='product_category orng'>{product.product_category}</p>
                 </div>
-                <p className='price white'>{product.price} ₽</p>
+                <p className='price white'>{product.product_price} ₽</p>
               </div>
               <div className='white'>
                 <p className='status_display'>{product.status}</p>
