@@ -132,7 +132,7 @@ function Main({ searchQuery }) {
          <ul className='main_products_list'>
             {filteredProducts.map(product => (
                <li key={product.id} className='main_products_list_item'>
-                  <img className='main_products_image' alt='Изображение товара' src={Example} /> {/* Замените на product.photo_id, если у вас есть URL изображения */}
+                  <img className='main_products_image' alt='Изображение товара' src={Example} />
 
                   <div className='product_info'>
                      <div className='product_info_container'>
